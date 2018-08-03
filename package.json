@@ -1,0 +1,33 @@
+{
+  "name": "@karbon14/crowdsale-contracts",
+  "version": "1.0.0",
+  "description": "Karbon14 Smart Contracts",
+  "main": "index.js",
+  "scripts": {
+    "compile": "rimraf build && truffle compile --verbose",
+    "test": "truffle test",
+    "migrate": "truffle migrate",
+    "ganache": "ganache-cli",
+    "ropsten": "rimraf build && npm run migrate -- --network=ropsten"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karbon14/crowdsale-contracts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/karbon14/crowdsale-contracts/issues"
+  },
+  "homepage": "https://github.com/karbon14/crowdsale-contracts#readme",
+  "devDependencies": {
+    "ganache-cli": "6.1.6",
+    "rimraf": "2.6.2",
+    "truffle": "4.1.13",
+    "truffle-hdwallet-provider": "0.0.6"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "1.11.0"
+  }
+}
