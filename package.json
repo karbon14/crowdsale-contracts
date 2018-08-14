@@ -4,7 +4,7 @@
   "description": "Karbon14 Smart Contracts",
   "main": "index.js",
   "scripts": {
-    "compile": "rimraf build && truffle compile --verbose",
+    "compile": "rimraf build && truffle compile --verbose-rpc",
     "test": "truffle test",
     "migrate": "truffle migrate",
     "ganache": "ganache-cli",
