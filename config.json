@@ -1,0 +1,9 @@
+{
+  "TOKEN_NAME": "Karbon14",
+  "TOKEN_TICKER": "K14",
+  "TOKEN_DECIMALS": 8,
+  "TOKEN_RATE": 30000,
+  "HARD_CAP": 60000,
+  "SOFT_CAP": 6000,
+  "DISTRIBUTION": 50
+}

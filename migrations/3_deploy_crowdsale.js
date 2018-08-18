@@ -1,5 +1,6 @@
 const Karbon14Token = artifacts.require('Karbon14Token')
 const Karbon14Crowdsale = artifacts.require('Karbon14Crowdsale')
+const { TOKEN_RATE, HARD_CAP, SOFT_CAP, DISTRIBUTION } = require('../config.json')
 
 const duration = {
   seconds: function(val) { return val },
@@ -11,13 +12,25 @@ const duration = {
 }
 
 module.exports = async (deployer, network, accounts, data) => {
-  const rate = 1000; //1 eth = 1000 K14 tokens
+  const rate = TOKEN_RATE // 1 eth = 1000 K14 tokens
   const wallet = accounts[0]
   const timeNow = Math.floor(Date.now() / 1000) 
   const openingTime = timeNow + duration.seconds(0)
   const closingTime = timeNow + duration.years(1)
-  const cap = web3.toWei(100); //100 eth
-  await deployer.deploy(Karbon14Crowdsale, rate, wallet, Karbon14Token.address, openingTime, closingTime, cap)
+  const hardCap = web3.toWei(HARD_CAP); // eth
+  const softCap = web3.toWei(SOFT_CAP); // eth
+
+  await deployer.deploy(
+    Karbon14Crowdsale, 
+    rate, 
+    wallet, 
+    Karbon14Token.address, 
+    openingTime, 
+    closingTime, 
+    hardCap, 
+    softCap,
+    DISTRIBUTION
+  )
   
   const karbon14Crowdsale = await Karbon14Crowdsale.deployed()
   const karbon14Token = await Karbon14Token.deployed()

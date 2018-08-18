@@ -1,27 +1,25 @@
 const Karbon14Token = artifacts.require('karbon14Token')
+const { TOKEN_NAME, TOKEN_TICKER, TOKEN_DECIMALS } = require('../config.json')
+
 
 contract('karbon14Token', function(accounts) {
-  const _name = 'Karbon14 Token'
-  const _symbol = 'K14'
-  const _decimals = 8
-
-  it(`should be ${_name} the name of the new token`, async() => {
+  it(`should be ${TOKEN_NAME} the name of the new token`, async() => {
     const karbon14Token = await Karbon14Token.deployed()
     const name = await karbon14Token.name()
 
-    assert.equal(name, _name)
+    assert.equal(name, TOKEN_NAME)
   })
 
-  it(`should be ${_symbol} the symbol of the new token`, async() => {
+  it(`should be ${TOKEN_TICKER} the symbol of the new token`, async() => {
     const karbon14Token = await Karbon14Token.deployed()
-    const symbol = await karbon14Token.symbol()
+    const ticker = await karbon14Token.symbol()
 
-    assert.equal(symbol, _symbol)
+    assert.equal(ticker, TOKEN_TICKER)
   })
 
-  it(`should be ${_decimals} the decimals of the new token`, async() => {
+  it(`should be ${TOKEN_DECIMALS} the decimals of the new token`, async() => {
     const karbon14Token = await Karbon14Token.deployed()
     const decimals = await karbon14Token.decimals()
-    assert.equal(decimals, _decimals)
+    assert.equal(decimals, TOKEN_DECIMALS)
   })
 })
