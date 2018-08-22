@@ -1,17 +1,16 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
-import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
-import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 import "openzeppelin-solidity/contracts/crowdsale/distribution/RefundableCrowdsale.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 
 interface MintableERC20 {
     function finishMinting() external returns (bool);
 }
 
-contract Karbon14Crowdsale is Crowdsale, TimedCrowdsale, CappedCrowdsale, RefundableCrowdsale, MintedCrowdsale {
+contract Karbon14Crowdsale is CappedCrowdsale, RefundableCrowdsale, MintedCrowdsale {
+    using SafeMath for uint256;
+    using SafeMath for uint;
     bool public isFinalized = false;
     MintableToken public token;
     uint hardCap;
@@ -61,17 +60,17 @@ contract Karbon14Crowdsale is Crowdsale, TimedCrowdsale, CappedCrowdsale, Refund
         return hardCap.mul(100).div(distribution).mul(rate);
     }
 
-    function finalize() public {
+    function finalize() onlyOwner public {
         require(!isFinalized);
         require(hasClosed() || capReached());
 
-        finalization();
+        crowdsaleClose();
         emit Finalized();
 
         isFinalized = true;
     }
 
-    function finalization() internal {
+    function crowdsaleClose() internal {
         uint256 totalCommunityTokens = getMaxCommunityTokens();
         uint256 totalSupply = token.totalSupply();
         uint256 unsold = totalCommunityTokens.sub(totalSupply);
@@ -81,6 +80,7 @@ contract Karbon14Crowdsale is Crowdsale, TimedCrowdsale, CappedCrowdsale, Refund
         token.mint(wallet, totalFundationTokens.add(unsold));
 
         MintableERC20 mintableToken = MintableERC20(token);
-        mintableToken.finishMinting();  
+        mintableToken.finishMinting();
+        finalization();
     }
 }
