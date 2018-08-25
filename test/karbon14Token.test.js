@@ -1,4 +1,4 @@
-const Karbon14Token = artifacts.require('karbon14Token')
+const Karbon14Token = artifacts.require('Karbon14Token')
 const { TOKEN_NAME, TOKEN_TICKER, TOKEN_DECIMALS } = require('../config.json')
 
 contract('karbon14Token', function() {
