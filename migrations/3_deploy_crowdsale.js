@@ -33,6 +33,7 @@ module.exports = async (deployer, network, accounts) => {
     OPENING_TIME_IN_DAYS,
     CLOSING_TIME_IN_DAYS,
     WALLET_ADDRESS,
+    TIMEZONE,
   } = getConfig(network)
 
   const wallet_address = {
@@ -44,8 +45,8 @@ module.exports = async (deployer, network, accounts) => {
   const rate = TOKEN_RATE
   const wallet = wallet_address[network]
   const timeNow = Math.floor(Date.now() / 1000)
-  const openingTime = timeNow + duration.days(OPENING_TIME_IN_DAYS)
-  const closingTime = timeNow + duration.days(CLOSING_TIME_IN_DAYS)
+  const openingTime = timeNow + duration.days(OPENING_TIME_IN_DAYS) + duration.hours(TIMEZONE)
+  const closingTime = timeNow + duration.days(CLOSING_TIME_IN_DAYS) + duration.hours(TIMEZONE)
   const hardCap = web3.toWei(HARD_CAP) // eth
   const softCap = web3.toWei(SOFT_CAP) // eth
   const distribution = DISTRIBUTION

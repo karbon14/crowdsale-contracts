@@ -2,7 +2,7 @@ const Karbon14Token = artifacts.require('Karbon14Token')
 const Karbon14Crowdsale = artifacts.require('Karbon14Crowdsale')
 const { duration, increaseTimeTo } = require('../Helpers/increaseTime')
 const { latestTime } = require('../Helpers/latestTime')
-
+const { isUnixTimestamp } = require('../Helpers/common')
 const { ether, bigNumberToString, getBalance } = require('../Helpers/web3')
 const {
   TOKEN_RATE,
@@ -39,6 +39,99 @@ const errorVM = 'VM Exception while processing transaction: revert'
 const softCap = ether(SOFT_CAP)
 const minSoftCap = ether(SOFT_CAP - 0.1)
 const hardCap = ether(HARD_CAP)
+
+describe('karbon14Crowdsale', () => {
+  contract('karbon14Crowdsale', async ([owner, investor, wallet, purchaser]) => {
+    it('should log purchase', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      const value = ether(1)
+      await openCrowsale()
+      const { logs } = await karbon14Crowdsale.sendTransaction({ value, from: investor })
+      const event = logs.find(e => e.event === 'TokenPurchase')
+
+      const actual = {
+        event: event.event,
+        value: bigNumberToString(event.args.value),
+        purchaser: event.args.purchaser,
+        beneficiary: event.args.beneficiary,
+        amount: bigNumberToString(value) * TOKEN_RATE,
+      }
+
+      const expected = {
+        event: 'TokenPurchase',
+        value: bigNumberToString(value),
+        purchaser: investor,
+        beneficiary: investor,
+        amount: bigNumberToString(value) * TOKEN_RATE,
+      }
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should return valid UNIX timestamp in openingTime', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      const openingTime = await karbon14Crowdsale.openingTime()
+
+      const actual = isUnixTimestamp(openingTime.c[0])
+      const expected = true
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should return valid UNIX timestamp in closingTime', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      const openingTime = await karbon14Crowdsale.closingTime()
+
+      const actual = isUnixTimestamp(openingTime.c[0])
+      const expected = true
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should return the soft cap', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      const goal = await karbon14Crowdsale.goal()
+
+      const actual = bigNumberToString(goal)
+      const expected = bigNumberToString(softCap)
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should return the hard cap', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      await openCrowsale()
+
+      const cap = await karbon14Crowdsale.cap()
+
+      const actual = bigNumberToString(cap)
+      const expected = bigNumberToString(hardCap)
+
+      assert.deepEqual(actual, expected)
+    })
+  })
+
+  contract('karbon14Crowdsale', async ([owner, investor, wallet, purchaser]) => {
+    it('should return total found during the crowdsale', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      const value = ether(1)
+      await openCrowsale()
+
+      const foundInEth1 = await karbon14Crowdsale.weiRaised()
+      assert.deepEqual(bigNumberToString(foundInEth1), '0')
+
+      await karbon14Crowdsale.sendTransaction({ value, from: investor })
+      const foundInEth2 = await karbon14Crowdsale.weiRaised()
+
+      assert.deepEqual(bigNumberToString(foundInEth2), '1')
+
+      await karbon14Crowdsale.sendTransaction({ value, from: investor })
+      const foundInEth3 = await karbon14Crowdsale.weiRaised()
+
+      assert.deepEqual(bigNumberToString(foundInEth3), '2')
+    })
+  })
+})
 
 describe('karbon14Crowdsale MintableToken', () => {
   contract('karbon14Crowdsale', async ([owner, investor, wallet, purchaser]) => {
@@ -361,54 +454,3 @@ describe('karbon14Crowdsale Finalize', () => {
     })
   })
 })
-
-// contract('karbon14Crowdsale', function([owner, investor, wallet, purchaser]) {
-//   it(`should buy ${TOKEN_RATE} tokens ${TOKEN_TICKER} with 1ETH`, async () => {
-//     const balanceWallet = await getBalance(wallet)
-//     console.log('balanceWallet ', bigNumberToString(balanceWallet))
-
-//     const balanceOwner = await getBalance(owner)
-//     console.log('balanceOwner ', bigNumberToString(balanceOwner))
-
-//     const balanceInvestor = await getBalance(investor)
-//     console.log('balanceInvestor ', bigNumberToString(balanceInvestor))
-
-//     const balancePurchaser = await getBalance(purchaser)
-//     console.log('balancePurchaser ', bigNumberToString(balancePurchaser))
-//     console.log(
-//       '===================================================================='
-//     )
-//     const { karbon14Crowdsale, karbon14Token } = await getContracts()
-
-//     // await karbon14Crowdsale.sendTransaction({ value, from: investor })
-//     await karbon14Crowdsale.sendTransaction({
-//       value: ether(1),
-//       from: investor,
-//       gasPrice: 0
-//     })
-//     const bkarbon14Crowdsale = await getBalance(karbon14Crowdsale.address)
-//     console.log('bkarbon14Crowdsale ', bigNumberToString(bkarbon14Crowdsale))
-//     await increaseTimeTo(
-//       timeAfterClosing(OPENING_TIME_IN_DAYS, CLOSING_TIME_IN_DAYS)
-//     )
-//     await karbon14Crowdsale.finalize({ from: owner })
-
-//     const balanceWalletAfter = await getBalance(wallet)
-//     console.log('balanceWalletAfter ', bigNumberToString(balanceWalletAfter))
-
-//     const balanceOwnerAfter = await getBalance(owner)
-//     console.log('balanceOwnerAfter ', bigNumberToString(balanceOwnerAfter))
-
-//     const balanceInvestorAfter = await getBalance(investor)
-//     console.log(
-//       'balanceInvestorAfter ',
-//       bigNumberToString(balanceInvestorAfter)
-//     )
-
-//     const balancePurchaserAfter = await getBalance(purchaser)
-//     console.log(
-//       'balancePurchaserAfter ',
-//       bigNumberToString(balancePurchaserAfter)
-//     )
-//   })
-// })
