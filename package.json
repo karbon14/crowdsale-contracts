@@ -9,8 +9,8 @@
     "migrate": "truffle migrate",
     "ganache": "ganache-cli",
     "ropsten": "rimraf build && npm run migrate -- --network=ropsten",
-    "lint": "eslint -f table test",
-    "lint:fix": "eslint --fix -f table test"
+    "lint": "eslint -f table test migrations *.js",
+    "lint:fix": "eslint --fix -f table test migrations *.js"
   },
   "repository": {
     "type": "git",
