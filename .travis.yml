@@ -4,5 +4,6 @@ services:
 before_script:
   - docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest
 script:
+  - npm run compile
   - npm run migrate
   - npm run test
