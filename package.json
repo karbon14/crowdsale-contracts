@@ -8,7 +8,9 @@
     "test": "NODE_ENV=test truffle test",
     "migrate": "truffle migrate",
     "ganache": "ganache-cli",
-    "ropsten": "rimraf build && npm run migrate -- --network=ropsten"
+    "ropsten": "rimraf build && npm run migrate -- --network=ropsten",
+    "lint": "eslint -f table test",
+    "lint:fix": "eslint --fix -f table test"
   },
   "repository": {
     "type": "git",
@@ -25,8 +27,12 @@
     "chai": "4.1.2",
     "chai-bignumber": "2.0.2",
     "dotenv": "6.0.0",
+    "eslint": "5.4.0",
+    "eslint-config-prettier": "3.0.1",
+    "eslint-plugin-prettier": "2.6.2",
     "ganache-cli": "6.1.6",
     "pify": "4.0.0",
+    "prettier": "1.14.2",
     "rimraf": "2.6.2",
     "truffle": "4.1.13",
     "truffle-hdwallet-provider": "0.0.6"

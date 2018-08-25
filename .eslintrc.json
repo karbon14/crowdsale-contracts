@@ -1,0 +1,51 @@
+{
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "globals": {
+      "artifacts": true,
+      "contract": true,
+      "it": true,
+      "assert": true,
+      "web3": true,
+      "context": true,
+      "describe": true
+    },
+    "plugins": [
+      "prettier"
+    ],
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+        "arrowFunctions": true,
+        "classes": true,
+        "destructuring": true,
+        "spread": true,
+        "experimentalObjectRestSpread": true
+      }
+    },
+    "rules": {
+      "no-extra-semi": 0,
+      "no-unused-vars": ["error", { "argsIgnorePattern": "owner|wallet|purchaser|investor", "ignoreRestSiblings": true }],
+      "react/display-name": 0,
+      "linebreak-style": ["error", "unix"],
+      "prettier/prettier": [
+        "warn",
+        {
+          "singleQuote": true,
+          "semi": false,
+          "printWidth": 120,
+          "tabWidth": 2,
+          "trailingComma": "es5"
+        }
+      ],
+      "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 3 }],
+      "allowAllPropertiesOnSameLine": true
+    }
+  }
