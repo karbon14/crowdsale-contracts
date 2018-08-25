@@ -1,4 +1,4 @@
 language: node_js
 script:
-  - npm run ganache &
+  - npm run ganache > /dev/null &
   - npm run test
