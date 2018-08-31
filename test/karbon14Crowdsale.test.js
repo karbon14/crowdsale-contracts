@@ -135,11 +135,10 @@ describe('karbon14Crowdsale', () => {
 
 describe('karbon14Crowdsale MintableToken', () => {
   contract('karbon14Crowdsale', async ([owner, investor, wallet, purchaser]) => {
-    const value = ether(1)
-    await openCrowsale()
-
     it(`should buy ${TOKEN_RATE} tokens ${TOKEN_TICKER} with 1ETH`, async () => {
       const { karbon14Crowdsale, karbon14Token } = await getContracts()
+      const value = ether(1)
+      await openCrowsale()
 
       await karbon14Crowdsale.buyTokens(investor, { value: value, from: purchaser })
       const tokens = await karbon14Token.balanceOf(investor)
