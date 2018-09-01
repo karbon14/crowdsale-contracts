@@ -10,7 +10,10 @@
     "ganache": "ganache-cli",
     "ropsten": "rimraf build && npm run migrate -- --network=ropsten",
     "lint": "eslint -f table test migrations Helpers *.js",
-    "lint:fix": "eslint --fix -f table test migrations Helpers *.js"
+    "lint:fix": "eslint --fix -f table test migrations Helpers *.js",
+    "flatten": "npm run flatten:token && npm run flatten:crowdsale",
+    "flatten:token": "truffle-flattener ./contracts/karbon14Token.sol --output ./flattened-contracts/karbon14Token.sol",
+    "flatten:crowdsale": "truffle-flattener ./contracts/Karbon14Crowdsale.sol --output ./flattened-contracts/Karbon14Crowdsale.sol"
   },
   "repository": {
     "type": "git",
@@ -39,6 +42,7 @@
   },
   "dependencies": {
     "bignumber.js": "^7.2.1",
-    "openzeppelin-solidity": "1.11.0"
+    "openzeppelin-solidity": "1.11.0",
+    "truffle-flattener": "1.2.6"
   }
 }
