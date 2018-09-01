@@ -478,6 +478,19 @@ describe('karbon14Crowdsale changeWallet', () => {
       assert.deepEqual(actual, expected)
     })
 
+    it('should return event WalletChange', async () => {
+      const { karbon14Crowdsale } = await getContracts()
+      await openCrowsale()
+
+      const { logs } = await karbon14Crowdsale.changeWallet(newWallet)
+      const { event } = logs.find(e => e.event === 'WalletChange')
+
+      const actual = event
+      const expected = 'WalletChange'
+
+      assert.deepEqual(actual, expected)
+    })
+
     it('should revert if is not owner', async () => {
       const { karbon14Crowdsale } = await getContracts()
       await openCrowsale()
