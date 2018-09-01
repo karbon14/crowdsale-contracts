@@ -109,6 +109,16 @@ describe('karbon14Crowdsale', () => {
 
       assert.deepEqual(actual, expected)
     })
+
+    it('should return wallet', async function() {
+      const { karbon14Crowdsale } = await getContracts()
+      await openCrowsale()
+
+      const actual = await karbon14Crowdsale.wallet()
+      const expected = wallet
+
+      assert.deepEqual(actual, expected)
+    })
   })
 
   contract('karbon14Crowdsale', async ([owner, investor, wallet, purchaser]) => {
@@ -450,6 +460,42 @@ describe('karbon14Crowdsale Finalize', () => {
 
         assert.deepEqual(actual, expected)
       })
+    })
+  })
+})
+
+describe('karbon14Crowdsale changeWallet', () => {
+  contract('karbon14Crowdsale', ([owner, investor, wallet, newWallet]) => {
+    it('should return the new wallet', async () => {
+      const { karbon14Crowdsale } = await getContracts()
+      await openCrowsale()
+
+      await karbon14Crowdsale.changeWallet(newWallet)
+
+      const actual = await karbon14Crowdsale.wallet()
+      const expected = newWallet
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should revert if is not owner', async () => {
+      const { karbon14Crowdsale } = await getContracts()
+      await openCrowsale()
+
+      const actual = await karbon14Crowdsale.changeWallet(newWallet, { from: investor }).catch(e => e.message)
+      const expected = errorVM
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should return an error when is an empty Wallet', async () => {
+      const { karbon14Crowdsale } = await getContracts()
+      await openCrowsale()
+
+      const actual = await karbon14Crowdsale.changeWallet().catch(e => e.message)
+      const expected = 'Invalid number of arguments to Solidity function'
+
+      assert.deepEqual(actual, expected)
     })
   })
 })

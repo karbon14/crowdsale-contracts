@@ -15,6 +15,8 @@ contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
     uint256 rate;
     uint distribution;
 
+    event WalletChange(address wallet);
+
     constructor
     (
         uint256 _rate,
@@ -36,6 +38,12 @@ contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
         hardCap = _hardCap;
         rate = _rate;
         distribution = _distribution;
+    }
+
+    function changeWallet(address _wallet) public onlyOwner {
+        require(_wallet != 0x0, "Wallet is required.");
+        wallet = _wallet;
+        emit WalletChange(_wallet);
     }
 
     function getTotalSupply() public view returns(uint256) {
