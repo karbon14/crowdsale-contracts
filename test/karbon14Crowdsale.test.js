@@ -512,3 +512,127 @@ describe('karbon14Crowdsale changeWallet', () => {
     })
   })
 })
+
+describe('karbon14Crowdsale Foundation Token', () => {
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize and SOFT_CAP is not reached and is closed the crowdsale', () => {
+      it('should the balance in ETH of the wallet the same before of the crowdsale', async () => {
+        const { karbon14Crowdsale } = await getContracts()
+        const underSoftCap = ether(SOFT_CAP - 1)
+        const actual = bigNumberToString(await getBalance(wallet))
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: underSoftCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const expected = bigNumberToString(await getBalance(wallet))
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize and SOFT_CAP is not reached and is closed the crowdsale', () => {
+      it('should the balance in ETH of the wallet the same CAP', async () => {
+        const { karbon14Crowdsale } = await getContracts()
+        const balanceBefore = await getBalance(wallet)
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: softCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const actual = bigNumberToString(await getBalance(wallet))
+        const expected = bigNumberToString(balanceBefore.plus(softCap))
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize and SOFT_CAP is not reached and is closed the crowdsale', () => {
+      it('should the balance the total supply', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+        const underSoftCap = ether(SOFT_CAP - 1)
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: underSoftCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const actual = bigNumberToString(await karbon14Token.balanceOf(wallet))
+        const expected = bigNumberToString(await karbon14Crowdsale.getTokenTotalSupply())
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize and SOFT_CAP is reached and is closed the crowdsale', () => {
+      it('should the balance the tokens the total supply minus the soft cap', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: softCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const totalSupply = await karbon14Token.totalSupply()
+
+        const actual = bigNumberToString(await karbon14Token.balanceOf(wallet))
+        const expected = bigNumberToString(totalSupply.minus(softCap.mul(TOKEN_RATE)))
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize and HARD_CAP is not reached and is closed the crowdsale', () => {
+      it('should the balance in ETH of the wallet the same CAP', async () => {
+        const { karbon14Crowdsale } = await getContracts()
+        const balanceBefore = await getBalance(wallet)
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const actual = bigNumberToString(await getBalance(wallet))
+        const expected = bigNumberToString(balanceBefore.plus(hardCap))
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize and HARD_CAP is reached and is closed the crowdsale', () => {
+      it('should the balance the tokens the total supply minus the soft cap', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const totalSupply = await karbon14Token.totalSupply()
+
+        const actual = bigNumberToString(await karbon14Token.balanceOf(wallet))
+        const expected = bigNumberToString(totalSupply.minus(hardCap.mul(TOKEN_RATE)))
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+})

@@ -71,7 +71,11 @@ contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
         uint256 totalFundationTokens = getTotalFundationTokens();
 
         // emit tokens for the foundation
-        token.mint(wallet, totalFundationTokens.add(unsold));
+        if (goalReached()) {
+            token.mint(wallet, totalFundationTokens.add(unsold));
+        } else {
+            token.mint(wallet, totalFundationTokens.add(totalCommunityTokens));
+        }
 
         MintableERC20 mintableToken = MintableERC20(token);
         mintableToken.finishMinting();
