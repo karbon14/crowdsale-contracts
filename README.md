@@ -13,4 +13,4 @@ Natanael Zalazar | Vision K14 | Wolverine K14 |
 
 
 ## License
-[MIT](https://github.com/karbon14/crowdsale-ui/blob/master/.github/LICENSE)
+[MIT](https://github.com/karbon14/crowdsale-contracts/blob/master/.github/LICENSE)
