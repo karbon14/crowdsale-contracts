@@ -32,7 +32,7 @@
     },
     "rules": {
       "no-extra-semi": 0,
-      "no-unused-vars": ["error", { "argsIgnorePattern": "owner|wallet|purchaser|investor", "ignoreRestSiblings": true }],
+      "no-unused-vars": ["error", { "argsIgnorePattern": "owner|wallet|purchaser|investor|spender", "ignoreRestSiblings": true }],
       "react/display-name": 0,
       "linebreak-style": ["error", "unix"],
       "prettier/prettier": [
