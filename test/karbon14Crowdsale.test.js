@@ -462,6 +462,25 @@ describe('karbon14Crowdsale Finalize', () => {
       })
     })
   })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When call finalize', () => {
+      it('should be the owner of token the wallet', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
+
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const actual = await karbon14Token.owner()
+        const expected = wallet
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
 })
 
 describe('karbon14Crowdsale changeWallet', () => {
