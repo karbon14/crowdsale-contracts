@@ -655,3 +655,69 @@ describe('karbon14Crowdsale Foundation Token', () => {
     })
   })
 })
+
+describe('karbon14Crowdsale Burnable Token', () => {
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    it('should can burn all tokens', async () => {
+      const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+      await openCrowsale()
+      await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
+
+      await closeCrowsale()
+      await karbon14Crowdsale.finalize()
+
+      const BigNumber = web3.BigNumber
+      const totalBalanceWallet = bigNumberToString(await karbon14Token.balanceOf(wallet))
+      await karbon14Token.burn(new BigNumber(`${totalBalanceWallet}e+18`), { from: wallet })
+
+      const actual = bigNumberToString(await karbon14Token.balanceOf(wallet))
+      const expected = '0'
+
+      assert.deepEqual(actual, expected)
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    it('should burn emit the event Burn', async () => {
+      const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+      await openCrowsale()
+      await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
+
+      await closeCrowsale()
+      await karbon14Crowdsale.finalize()
+
+      const BigNumber = web3.BigNumber
+      const totalBalanceWallet = bigNumberToString(await karbon14Token.balanceOf(wallet))
+      const { logs } = await karbon14Token.burn(new BigNumber(`${totalBalanceWallet}e+18`), { from: wallet })
+
+      const actual = logs[0].event
+      const expected = 'Burn'
+
+      assert.deepEqual(actual, expected)
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    it('should error if exceed the balance', async () => {
+      const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+      await openCrowsale()
+      await karbon14Crowdsale.buyTokens(investor, { value: ether(1), from: investor })
+
+      await closeCrowsale()
+      await karbon14Crowdsale.finalize()
+
+      const BigNumber = web3.BigNumber
+
+      const addToken = TOKEN_RATE + 1
+      const exceedBalance = new BigNumber(`${addToken}e+18`)
+
+      const actual = await karbon14Token.burn(exceedBalance, { from: investor }).catch(e => e.message)
+      const expected = errorVM
+
+      assert.deepEqual(actual, expected)
+    })
+  })
+})
