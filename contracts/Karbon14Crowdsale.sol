@@ -3,10 +3,6 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 import "./helpers/RefundableCrowdsale.sol";
 
-interface MintableERC20 {
-    function finishMinting() external returns (bool);
-}
-
 contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
     using SafeMath for uint256;
     using SafeMath for uint;
@@ -77,7 +73,7 @@ contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
             token.mint(wallet, totalFundationTokens.add(totalCommunityTokens));
         }
 
-        MintableERC20 mintableToken = MintableERC20(token);
-        mintableToken.finishMinting();
+        token.finishMinting();
+        token.transferOwnership(wallet);
     }
 }
