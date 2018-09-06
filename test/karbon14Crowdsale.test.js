@@ -1171,7 +1171,9 @@ describe('karbon14Crowdsale Pausable Token', () => {
         assert.deepEqual(actual, expected)
       })
     })
+  })
 
+  describe('transfer from', function() {
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
       it('allows to transfer from when unpaused', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
@@ -1185,20 +1187,58 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
 
         const tokens = new BigNumber(`${minSoftCap}e+18`)
-        karbon14Token.approve(wallet, tokens, { from: owner });
+        await karbon14Token.approve(wallet, tokens, { from: owner })
 
         const tokensTransfer = new BigNumber(`${1}e+18`)
 
-        await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet });
+        const oldOwnerTokens = parseInt(bigNumberToString(await karbon14Token.balanceOf(owner)))
+        
+        await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet })
 
         const actualOwner = bigNumberToString(await karbon14Token.balanceOf(owner))
-        const expectedOwner = '56999'
+        const expectedOwner = (oldOwnerTokens - parseInt(bigNumberToString(tokensTransfer))).toString()
+        
         const actualPurchaser = bigNumberToString(await karbon14Token.balanceOf(purchaser))
-        const expectedPurchaser = '1'
+        const expectedPurchaser = bigNumberToString(tokensTransfer)
         
         assert.deepEqual(actualOwner, expectedOwner)
         assert.deepEqual(actualPurchaser, expectedPurchaser)
       
+      })
+    })
+
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('allows to transfer when paused and then unpaused', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+        const BigNumber = web3.BigNumber
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(owner, { value: minSoftCap, from: investor })
+        
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+
+        const tokens = new BigNumber(`${minSoftCap}e+18`)
+        const tokensTransfer = new BigNumber(`${1}e+18`)
+        
+        await karbon14Token.approve(wallet, tokens, { from: owner })
+
+        await karbon14Token.pause({ from: wallet })
+        await karbon14Token.unpause({ from: wallet })
+
+        const oldOwnerTokens = parseInt(bigNumberToString(await karbon14Token.balanceOf(owner)))
+        
+        await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet })
+
+        const actualOwner = bigNumberToString(await karbon14Token.balanceOf(owner))
+        const expectedOwner = (oldOwnerTokens - parseInt(bigNumberToString(tokensTransfer))).toString()
+
+        const actualPurchaser = bigNumberToString(await karbon14Token.balanceOf(purchaser))
+        const expectedPurchaser = bigNumberToString(tokensTransfer)
+        
+        assert.deepEqual(actualOwner, expectedOwner)
+        assert.deepEqual(actualPurchaser, expectedPurchaser)
       })
     })
   })
