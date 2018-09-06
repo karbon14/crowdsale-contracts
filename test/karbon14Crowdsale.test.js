@@ -1292,6 +1292,27 @@ describe('karbon14Crowdsale Pausable Token', () => {
       })
     })
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('reverts when trying to increase approval when paused', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+        const BigNumber = web3.BigNumber
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(purchaser, { value: minSoftCap, from: investor })
+        
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const tokensApprove = new BigNumber(`${40}e+18`)
+
+        await karbon14Token.pause({ from: wallet })
+
+        const actual = await karbon14Token.increaseApproval(purchaser, tokensApprove, { from: wallet }).catch(e => e.message)
+        const expected = errorVM
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
       it('allows to increase approval when paused and then unpaused', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
         const BigNumber = web3.BigNumber
