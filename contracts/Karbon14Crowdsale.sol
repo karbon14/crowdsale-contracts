@@ -73,7 +73,6 @@ contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
             token.mint(wallet, totalFundationTokens.add(totalCommunityTokens));
         }
 
-        token.finishMinting();
         token.transferOwnership(wallet);
     }
 }
