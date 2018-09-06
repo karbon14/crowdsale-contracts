@@ -1241,5 +1241,30 @@ describe('karbon14Crowdsale Pausable Token', () => {
         assert.deepEqual(actualPurchaser, expectedPurchaser)
       })
     })
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('reverts when trying to transfer from when paused', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+        const BigNumber = web3.BigNumber
+
+        await openCrowsale()
+        await karbon14Crowdsale.buyTokens(owner, { value: minSoftCap, from: investor })
+        
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+
+        const tokens = new BigNumber(`${minSoftCap}e+18`)
+        const tokensTransfer = new BigNumber(`${1}e+18`)
+        
+        await karbon14Token.approve(wallet, tokens, { from: owner })
+
+        await karbon14Token.pause({ from: wallet })
+
+        const actual = await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet }).catch(e => e.message)
+        const expected = errorVM
+
+        assert.deepEqual(actual, expected)
+      })
+    })
   })
 })
