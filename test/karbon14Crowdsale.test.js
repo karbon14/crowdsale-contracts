@@ -756,6 +756,34 @@ describe('karbon14Crowdsale Mintable Token', () => {
         assert.deepEqual(actual, expected)
       })
     })
+
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('should can not finishMinting by the owner', async () => {
+        const { karbon14Token } = await getContracts()
+
+        await openCrowsale()
+
+        const owner = await karbon14Token.owner()
+
+        const actual = await karbon14Token.finishMinting({ from: owner }).catch(e => e.message)
+        const expected = 'sender account not recognized'
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('should can not finishMinting by the owner', async () => {
+        const { karbon14Token } = await getContracts()
+
+        await openCrowsale()
+
+        const actual = await karbon14Token.finishMinting({ from: wallet }).catch(e => e.message)
+        const expected = errorVM
+
+        assert.deepEqual(actual, expected)
+      })
+    })
   })
 
   context('when the crowdsale is close', () => {
@@ -764,8 +792,6 @@ describe('karbon14Crowdsale Mintable Token', () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
-        await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
-
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
@@ -785,8 +811,6 @@ describe('karbon14Crowdsale Mintable Token', () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
-        await karbon14Crowdsale.buyTokens(investor, { value: hardCap, from: investor })
-
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
@@ -794,6 +818,37 @@ describe('karbon14Crowdsale Mintable Token', () => {
         const amount = new BigNumber(`${1}e+18`)
 
         const actual = await karbon14Token.mint(purchaser, amount, { from: investor }).catch(e => e.message)
+        const expected = errorVM
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('should can finishMinting by the owner', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+        await openCrowsale()
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const { logs } = await karbon14Token.finishMinting({ from: wallet })
+        const actual = logs[0].event
+        const expected = 'MintFinished'
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+
+    contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+      it('should can not finishMinting if not owner', async () => {
+        const { karbon14Token, karbon14Crowdsale } = await getContracts()
+
+        await openCrowsale()
+        await closeCrowsale()
+        await karbon14Crowdsale.finalize()
+
+        const actual = await karbon14Token.finishMinting({ from: investor }).catch(e => e.message)
         const expected = errorVM
 
         assert.deepEqual(actual, expected)
