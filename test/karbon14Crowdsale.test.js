@@ -742,7 +742,7 @@ describe('karbon14Crowdsale Mintable Token', () => {
     })
 
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-      it('should can not mint by the owner', async () => {
+      it('should can not mint by the wallet', async () => {
         const { karbon14Token } = await getContracts()
 
         await openCrowsale()
@@ -773,7 +773,7 @@ describe('karbon14Crowdsale Mintable Token', () => {
     })
 
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-      it('should can not finishMinting by the owner', async () => {
+      it('should can not finishMinting by the wallet', async () => {
         const { karbon14Token } = await getContracts()
 
         await openCrowsale()
@@ -807,7 +807,7 @@ describe('karbon14Crowdsale Mintable Token', () => {
     })
 
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-      it('should can not mint if not owner', async () => {
+      it('should can not mint if is not owner', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
@@ -825,7 +825,7 @@ describe('karbon14Crowdsale Mintable Token', () => {
     })
 
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-      it('should can finishMinting by the owner', async () => {
+      it('should can finishMinting by the wallet', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
@@ -841,7 +841,7 @@ describe('karbon14Crowdsale Mintable Token', () => {
     })
 
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-      it('should can not finishMinting if not owner', async () => {
+      it('should can not finishMinting if is not owner', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
