@@ -1326,10 +1326,10 @@ describe('karbon14Crowdsale Pausable Token', () => {
         await karbon14Token.pause({ from: wallet })
         await karbon14Token.unpause({ from: wallet })
 
-        const actual = await karbon14Token
-          .increaseApproval(purchaser, tokensApprove, { from: wallet })
-          .catch(e => e.message)
-        const expected = errorVM
+        await karbon14Token.increaseApproval(purchaser, tokensApprove, { from: wallet })
+
+        const actual = bigNumberToString(await karbon14Token.allowance(wallet, purchaser))
+        const expected = '40'
 
         assert.deepEqual(actual, expected)
       })
