@@ -1,6 +1,7 @@
 const Karbon14Token = artifacts.require('Karbon14Token')
 const Karbon14Crowdsale = artifacts.require('Karbon14Crowdsale')
-const { TOKEN_NAME, TOKEN_TICKER, TOKEN_DECIMALS } = require('../config.json')
+const { getConfig } = require('../Helpers/getConfig')
+const { TOKEN_NAME, TOKEN_TICKER, TOKEN_DECIMALS } = getConfig('development')
 
 const getContracts = async () => {
   const karbon14Token = await Karbon14Token.deployed()

@@ -4,6 +4,8 @@ const { duration, increaseTimeTo } = require('../Helpers/increaseTime')
 const { latestTime } = require('../Helpers/latestTime')
 const { isUnixTimestamp } = require('../Helpers/common')
 const { ether, bigNumberToString, getBalance } = require('../Helpers/web3')
+const { getConfig } = require('../Helpers/getConfig')
+
 const {
   TOKEN_RATE,
   TOKEN_TICKER,
@@ -12,7 +14,7 @@ const {
   CLOSING_TIME_IN_DAYS,
   SOFT_CAP,
   HARD_CAP,
-} = require('../config-test.json')
+} = getConfig('development')
 
 const getContracts = async () => {
   const karbon14Token = await Karbon14Token.deployed()

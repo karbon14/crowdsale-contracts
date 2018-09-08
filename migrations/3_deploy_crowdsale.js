@@ -1,5 +1,6 @@
 const Karbon14Token = artifacts.require('Karbon14Token')
 const Karbon14Crowdsale = artifacts.require('Karbon14Crowdsale')
+const { getConfig } = require('../Helpers/getConfig')
 
 const duration = {
   seconds: function(val) {
@@ -21,8 +22,6 @@ const duration = {
     return val * this.days(365)
   },
 }
-
-const getConfig = network => (network === 'live' ? require('../config.json') : require('../config-test.json'))
 
 module.exports = async (deployer, network, accounts) => {
   const {
