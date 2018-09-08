@@ -932,8 +932,6 @@ describe('karbon14Crowdsale Pausable Token', () => {
           await closeCrowsale()
           await karbon14Crowdsale.finalize()
 
-          await karbon14Token.pause({ from: wallet })
-
           const actual = await karbon14Token.pause({ from: investor }).catch(e => e.message)
           const expected = errorVM
 
@@ -1181,10 +1179,9 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         await openCrowsale()
         await karbon14Crowdsale.buyTokens(owner, { value: minSoftCap, from: investor })
-        
+
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
-
 
         const tokens = new BigNumber(`${minSoftCap}e+18`)
         await karbon14Token.approve(wallet, tokens, { from: owner })
@@ -1192,18 +1189,17 @@ describe('karbon14Crowdsale Pausable Token', () => {
         const tokensTransfer = new BigNumber(`${1}e+18`)
 
         const oldOwnerTokens = parseInt(bigNumberToString(await karbon14Token.balanceOf(owner)))
-        
+
         await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet })
 
         const actualOwner = bigNumberToString(await karbon14Token.balanceOf(owner))
         const expectedOwner = (oldOwnerTokens - parseInt(bigNumberToString(tokensTransfer))).toString()
-        
+
         const actualPurchaser = bigNumberToString(await karbon14Token.balanceOf(purchaser))
         const expectedPurchaser = bigNumberToString(tokensTransfer)
-        
+
         assert.deepEqual(actualOwner, expectedOwner)
         assert.deepEqual(actualPurchaser, expectedPurchaser)
-      
       })
     })
 
@@ -1214,21 +1210,20 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         await openCrowsale()
         await karbon14Crowdsale.buyTokens(owner, { value: minSoftCap, from: investor })
-        
+
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
-
         const tokens = new BigNumber(`${minSoftCap}e+18`)
         const tokensTransfer = new BigNumber(`${1}e+18`)
-        
+
         await karbon14Token.approve(wallet, tokens, { from: owner })
 
         await karbon14Token.pause({ from: wallet })
         await karbon14Token.unpause({ from: wallet })
 
         const oldOwnerTokens = parseInt(bigNumberToString(await karbon14Token.balanceOf(owner)))
-        
+
         await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet })
 
         const actualOwner = bigNumberToString(await karbon14Token.balanceOf(owner))
@@ -1236,11 +1231,12 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         const actualPurchaser = bigNumberToString(await karbon14Token.balanceOf(purchaser))
         const expectedPurchaser = bigNumberToString(tokensTransfer)
-        
+
         assert.deepEqual(actualOwner, expectedOwner)
         assert.deepEqual(actualPurchaser, expectedPurchaser)
       })
     })
+
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
       it('reverts when trying to transfer from when paused', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
@@ -1248,19 +1244,20 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         await openCrowsale()
         await karbon14Crowdsale.buyTokens(owner, { value: minSoftCap, from: investor })
-        
+
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
-
         const tokens = new BigNumber(`${minSoftCap}e+18`)
         const tokensTransfer = new BigNumber(`${1}e+18`)
-        
+
         await karbon14Token.approve(wallet, tokens, { from: owner })
 
         await karbon14Token.pause({ from: wallet })
 
-        const actual = await karbon14Token.transferFrom(owner, purchaser, tokensTransfer, { from: wallet }).catch(e => e.message)
+        const actual = await karbon14Token
+          .transferFrom(owner, purchaser, tokensTransfer, { from: wallet })
+          .catch(e => e.message)
         const expected = errorVM
 
         assert.deepEqual(actual, expected)
@@ -1268,7 +1265,7 @@ describe('karbon14Crowdsale Pausable Token', () => {
     })
   })
 
-  describe('increase approval', function() { 
+  describe('increase approval', function() {
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
       it('allows to increase approval when unpaused', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
@@ -1276,14 +1273,13 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         await openCrowsale()
         await karbon14Crowdsale.buyTokens(purchaser, { value: minSoftCap, from: investor })
-        
+
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
         const tokensApprove = new BigNumber(`${40}e+18`)
 
         await karbon14Token.increaseApproval(purchaser, tokensApprove, { from: wallet })
-        
 
         const actual = bigNumberToString(await karbon14Token.allowance(wallet, purchaser))
         const expected = '40'
@@ -1291,6 +1287,7 @@ describe('karbon14Crowdsale Pausable Token', () => {
         assert.deepEqual(actual, expected)
       })
     })
+
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
       it('reverts when trying to increase approval when paused', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
@@ -1298,7 +1295,7 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         await openCrowsale()
         await karbon14Crowdsale.buyTokens(purchaser, { value: minSoftCap, from: investor })
-        
+
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
@@ -1312,6 +1309,7 @@ describe('karbon14Crowdsale Pausable Token', () => {
         assert.deepEqual(actual, expected)
       })
     })
+
     contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
       it('allows to increase approval when paused and then unpaused', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
@@ -1319,7 +1317,7 @@ describe('karbon14Crowdsale Pausable Token', () => {
 
         await openCrowsale()
         await karbon14Crowdsale.buyTokens(purchaser, { value: minSoftCap, from: investor })
-        
+
         await closeCrowsale()
         await karbon14Crowdsale.finalize()
 
@@ -1328,16 +1326,13 @@ describe('karbon14Crowdsale Pausable Token', () => {
         await karbon14Token.pause({ from: wallet })
         await karbon14Token.unpause({ from: wallet })
 
-        await karbon14Token.increaseApproval(purchaser, tokensApprove, { from: wallet })
-        
-
-        const actual = bigNumberToString(await karbon14Token.allowance(wallet, purchaser))
-        const expected = '40'
+        const actual = await karbon14Token
+          .increaseApproval(purchaser, tokensApprove, { from: wallet })
+          .catch(e => e.message)
+        const expected = errorVM
 
         assert.deepEqual(actual, expected)
       })
     })
   })
-
-  
 })
