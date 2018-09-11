@@ -10,11 +10,9 @@ module.exports = async function(deployer, network) {
     OPENING_TIME_IN_DAYS,
     CLOSING_TIME_IN_DAYS,
     WALLET_ADDRESS,
-    TIMEZONE,
   } = getConfig(network)
 
   /* eslint-disable no-console */
-  console.log('network', network)
   console.log('TOKEN_RATE: ', TOKEN_RATE)
   console.log('HARD_CAP: ', HARD_CAP)
   console.log('SOFT_CAP: ', SOFT_CAP)
@@ -22,7 +20,6 @@ module.exports = async function(deployer, network) {
   console.log('OPENING_TIME_IN_DAYS: ', OPENING_TIME_IN_DAYS)
   console.log('CLOSING_TIME_IN_DAYS: ', CLOSING_TIME_IN_DAYS)
   console.log('WALLET_ADDRESS: ', WALLET_ADDRESS)
-  console.log('TIMEZONE: ', TIMEZONE)
   /* eslint-enable no-console */
   await deployer.deploy(Migrations)
 }
