@@ -10,6 +10,7 @@
     "ganache": "ganache-cli",
     "ropsten": "rimraf build && npm run migrate -- --network=ropsten",
     "development": "rimraf build && npm run migrate -- --network=development",
+    "live": "rimraf build && npm run migrate -- --network=live",
     "lint": "eslint -f table test migrations Helpers *.js",
     "lint:fix": "eslint --fix -f table test migrations Helpers *.js",
     "flatten": "npm run flatten:token && npm run flatten:crowdsale",
