@@ -10,7 +10,7 @@
 
 ## Details about Karbon14 token
 
-The token Karbon14 extend the these contracts DetailedERC20, MintableToken, BurnableToken and PausableToken.
+The token Karbon14 extend of these contracts DetailedERC20, MintableToken, BurnableToken, and PausableToken.
 
 - **DetailedERC20 (Extends of ERC20):** An ERC20 token is a contract that keeps track of a mapping(address => uint256) that represents a user's balance. These tokens are fungible in that any one token is exactly equal to any other token; no tokens have special rights or behavior associated with them. This makes ERC20 useful for things like a medium of exchange currency, general voting rights, staking, and more.
 
