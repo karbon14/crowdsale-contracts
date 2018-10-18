@@ -24,15 +24,15 @@ This behavior adds extra security to the community:
 
 ## Details about Crowdsale of Karbon14
 
-The contract of the Crowdasle of Karbon14 extends of RefundableCrowdsale and MintedCrowdsale
+The contract of the Crowdasle of Karbon14 extends of RefundableCrowdsale and MintedCrowdsale.
 
 - **MintedCrowdsale:** The Crowdsale mints tokens when a purchase is made.
 
-- **RefundableCrowdsale:** Offers to refund users if a minimum goal is not reached. If the goal is not reached, the users can claimRefund() to get their Ether back. RefundableCrowdsale brings another function like as TimedCrowdsale and CappedCrowdsale
+- **RefundableCrowdsale:** Offers to refund users if a minimum goal is not reached. If the goal is not reached, the users can claimRefund() to get their Ether back. RefundableCrowdsale brings another function like as TimedCrowdsale and CappedCrowdsale.
 
-- **TimedCrowdsale:** Adds an openingTime and closingTime to your crowdsale
+- **TimedCrowdsale:** Adds an openingTime and closingTime to your crowdsale.
 
-- **CappedCrowdsale:** Adds a cap to your crowdsale, invalidating any purchases that would exceed that cap
+- **CappedCrowdsale:** Adds a cap to your crowdsale, invalidating any purchases that would exceed that cap.
 
 ## Generating the final tokens when finalizing the crowsale
 
