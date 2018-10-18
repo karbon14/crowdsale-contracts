@@ -12,25 +12,27 @@
 
 The token Karbon14 extend the these contracts DetailedERC20, MintableToken, BurnableToken and PausableToken.
 
-- DetailedERC20 (Extends of ERC20): An ERC20 token is a contract that keeps track of a mapping(address => uint256) that represents a user's balance. These tokens are fungible in that any one token is exactly equal to any other token; no tokens have special rights or behavior associated with them. This makes ERC20 useful for things like a medium of exchange currency, general voting rights, staking, and more.
+- **DetailedERC20 (Extends of ERC20):** An ERC20 token is a contract that keeps track of a mapping(address => uint256) that represents a user's balance. These tokens are fungible in that any one token is exactly equal to any other token; no tokens have special rights or behavior associated with them. This makes ERC20 useful for things like a medium of exchange currency, general voting rights, staking, and more.
 
-- MintableToken: Allows users with the MinterRole to call the mint() function and mint tokens to users. Minting can also be finished, locking the mint() function's behavior. In karbon14 only the owner can execute this action or in the stage of crowdsale where the owner is the contract of the crowsale.
+This behavior adds extra security to the community:
 
-- BurnableToken: If your token can be burned (aka, it can be destroyed), include this one. In karbon14 only the owner can execute this action.
+- **MintableToken:** Allows users with the MinterRole to call the mint() function and mint tokens to users. Minting can also be finished, locking the mint() function's behavior. In karbon14 only the owner can execute this action or in the stage of crowdsale where the owner is the contract of the crowsale.
 
-- PausableToken: Allows anyone with the Pauser role to pause the token, freezing transfers to and from users. This is useful if you want to stop trades until the end of a crowdsale, or if you want to have an emergency switch for freezing your tokens in the event of a large bug. Note that there are inherent decentralization tradeoffs when using a pausable token; users may not expect that their unstoppable money can be frozen by a single address!. In karbon14 only the owner can execute this action.
+- **BurnableToken:** If your token can be burned (aka, it can be destroyed), include this one. In karbon14 only the owner can execute this action.
+
+- **PausableToken:** Allows anyone with the Pauser role to pause the token, freezing transfers to and from users. This is useful if you want to stop trades until the end of a crowdsale, or if you want to have an emergency switch for freezing your tokens in the event of a large bug. Note that there are inherent decentralization tradeoffs when using a pausable token; users may not expect that their unstoppable money can be frozen by a single address!. In karbon14 only the owner can execute this action.
 
 ## Details about Crowdsale of Karbon14
 
 The contract of the Crowdasle of Karbon14 extends of RefundableCrowdsale and MintedCrowdsale
 
-- MintedCrowdsale: The Crowdsale mints tokens when a purchase is made.
+- **MintedCrowdsale:** The Crowdsale mints tokens when a purchase is made.
 
-- RefundableCrowdsale: Offers to refund users if a minimum goal is not reached. If the goal is not reached, the users can claimRefund() to get their Ether back. RefundableCrowdsale brings another function like as TimedCrowdsale and CappedCrowdsale
+- **RefundableCrowdsale:** Offers to refund users if a minimum goal is not reached. If the goal is not reached, the users can claimRefund() to get their Ether back. RefundableCrowdsale brings another function like as TimedCrowdsale and CappedCrowdsale
 
-- TimedCrowdsale: Adds an openingTime and closingTime to your crowdsale
+- **TimedCrowdsale:** Adds an openingTime and closingTime to your crowdsale
 
-- CappedCrowdsale: Adds a cap to your crowdsale, invalidating any purchases that would exceed that cap
+- **CappedCrowdsale:** Adds a cap to your crowdsale, invalidating any purchases that would exceed that cap
 
 ## Generating the final tokens when finalizing the crowsale
 
