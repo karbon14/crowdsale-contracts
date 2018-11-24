@@ -556,7 +556,7 @@ describe('karbon14Crowdsale Foundation Token', () => {
   })
 
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-    context('When call finalize and SOFT_CAP is not reached and is closed the crowdsale', () => {
+    context('When call finalize and SOFT_CAP is reached and is closed the crowdsale', () => {
       it('should the balance in ETH of the wallet the same CAP', async () => {
         const { karbon14Crowdsale } = await getContracts()
         const balanceBefore = await getBalance(wallet)
@@ -577,7 +577,7 @@ describe('karbon14Crowdsale Foundation Token', () => {
 
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
     context('When call finalize and SOFT_CAP is not reached and is closed the crowdsale', () => {
-      it('should the balance the total supply', async () => {
+      it('should the Foundation Wallet have the total supply of Tokens of Karbon14', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
         const underSoftCap = ether(SOFT_CAP - 1)
 
@@ -597,7 +597,7 @@ describe('karbon14Crowdsale Foundation Token', () => {
 
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
     context('When call finalize and SOFT_CAP is reached and is closed the crowdsale', () => {
-      it('should the balance the tokens the total supply minus the soft cap', async () => {
+      it('should the Foundation Wallet have the total supply of Tokens of Karbon14 minus the soft cap', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
@@ -617,7 +617,7 @@ describe('karbon14Crowdsale Foundation Token', () => {
   })
 
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-    context('When call finalize and HARD_CAP is not reached and is closed the crowdsale', () => {
+    context('When call finalize and HARD_CAP is reached and is closed the crowdsale', () => {
       it('should the balance in ETH of the wallet the same CAP', async () => {
         const { karbon14Crowdsale } = await getContracts()
         const balanceBefore = await getBalance(wallet)
@@ -638,7 +638,7 @@ describe('karbon14Crowdsale Foundation Token', () => {
 
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
     context('When call finalize and HARD_CAP is reached and is closed the crowdsale', () => {
-      it('should the balance the tokens the total supply minus the hard cap', async () => {
+      it('should the Foundation Wallet have the total supply of Tokens of Karbon14 minus the hard cap', async () => {
         const { karbon14Token, karbon14Crowdsale } = await getContracts()
 
         await openCrowsale()
