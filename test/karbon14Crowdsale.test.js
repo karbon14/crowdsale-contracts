@@ -537,7 +537,7 @@ describe('karbon14Crowdsale changeWallet', () => {
 
 describe('karbon14Crowdsale Foundation Token', () => {
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-    context('When deploy the token of Karbon14', () => {
+    context('When deploy the token of Karbon14 before open crowdsale', () => {
       it('should the Foundation Wallet have the total supply of Tokens of Karbon14', async () => {
         const { karbon14Token } = await getContracts()
         const actual = (await karbon14Token.balanceOf(wallet)).toString()
@@ -552,7 +552,7 @@ describe('karbon14Crowdsale Foundation Token', () => {
   })
 
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
-    context('When deploy the token of Karbon14', () => {
+    context('When deploy the token of Karbon14 after open crowdsale', () => {
       it('should the Foundation Wallet have the total supply of Tokens of Karbon14', async () => {
         const { karbon14Token } = await getContracts()
 
