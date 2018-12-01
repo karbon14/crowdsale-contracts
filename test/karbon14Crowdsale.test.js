@@ -14,6 +14,7 @@ const {
   CLOSING_TIME_IN_DAYS,
   SOFT_CAP,
   HARD_CAP,
+  DISTRIBUTION,
 } = getConfig('development')
 
 const getContracts = async () => {
@@ -535,6 +536,39 @@ describe('karbon14Crowdsale changeWallet', () => {
 })
 
 describe('karbon14Crowdsale Foundation Token', () => {
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When deploy the token of Karbon14', () => {
+      it('should the Foundation Wallet have the total supply of Tokens of Karbon14', async () => {
+        const { karbon14Token } = await getContracts()
+        const actual = (await karbon14Token.balanceOf(wallet)).toString()
+
+        const totalSupply = ((hardCap * 100) / DISTRIBUTION) * TOKEN_RATE
+        const communityTokens = hardCap * TOKEN_RATE
+        const expected = (totalSupply - communityTokens).toString()
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
+  contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
+    context('When deploy the token of Karbon14', () => {
+      it('should the Foundation Wallet have the total supply of Tokens of Karbon14', async () => {
+        const { karbon14Token } = await getContracts()
+
+        await openCrowsale()
+
+        const actual = (await karbon14Token.balanceOf(wallet)).toString()
+
+        const totalSupply = ((hardCap * 100) / DISTRIBUTION) * TOKEN_RATE
+        const communityTokens = hardCap * TOKEN_RATE
+        const expected = (totalSupply - communityTokens).toString()
+
+        assert.deepEqual(actual, expected)
+      })
+    })
+  })
+
   contract('karbon14Crowdsale', ([owner, investor, wallet, purchaser]) => {
     context('When call finalize and SOFT_CAP is not reached and is closed the crowdsale', () => {
       it('should the balance in ETH of the wallet the same before of the crowdsale', async () => {

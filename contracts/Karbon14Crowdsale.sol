@@ -62,15 +62,14 @@ contract Karbon14Crowdsale is RefundableCrowdsale, MintedCrowdsale {
 
     function crowdsaleClose() internal {
         uint256 totalCommunityTokens = getMaxCommunityTokens();
-        uint256 totalSupply = token.totalSupply();
-        uint256 unsold = totalCommunityTokens.sub(totalSupply);
-        uint256 totalFundationTokens = getTotalFundationTokens();
+        uint256 buyCommunity = token.totalSupply().sub(getTotalFundationTokens());
+        uint256 unsold = totalCommunityTokens.sub(buyCommunity);
 
         // emit tokens for the foundation
         if (goalReached()) {
-            token.mint(wallet, totalFundationTokens.add(unsold));
+            token.mint(wallet, unsold);
         } else {
-            token.mint(wallet, totalFundationTokens.add(totalCommunityTokens));
+            token.mint(wallet, totalCommunityTokens);
         }
 
         token.transferOwnership(wallet);
